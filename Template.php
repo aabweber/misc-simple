@@ -8,6 +8,7 @@
 
 namespace misc;
 
+use misc\Lang;
 
 class Template {
 

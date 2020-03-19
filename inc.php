@@ -34,8 +34,26 @@ spl_autoload_register(function ($class_name) {
     $class_name = str_replace('\\', '/', $class_name);
     $fname = BASE_DIR.'/'.$class_name.'.php';
     if(!is_file($fname)){
-//        print_r(debug_backtrace());
-//	    echo "Can't include file $fname\n";
+//        error_log('!!!!!!!!!!!!!!!!!!');
+//        if(preg_match('#([^/]+)$#si', $class_name, $ms)) {
+//            $fname = BASE_DIR . '/misc/' . $ms[1] . '.php';
+//            if(is_file($fname)){
+//                error_log($fname);
+//                include $fname;
+//            }
+//        }
+//        error_log(print_r($ms, true));
+    //        if(preg_match('#([^/]+)$#si', $class_name, $ms)){
+//            error_log($class_name."\n");
+//            error_log($fname."\n");
+//        }
+//        error_log("Can't find $class_name\n");
+//        foreach(debug_backtrace() as $info){
+//            if(isset($info['file'])) {
+//                error_log("BT: " . $info['file'] . '(' . $info['line'] . ')' . "\n");
+//            }
+//        }
+//        error_log(print_r(debug_backtrace(), true));
 //        exit;
 //	    return null;
     }else{
