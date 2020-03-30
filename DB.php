@@ -358,7 +358,6 @@ class DB{
         }
 
         $sql = 'UPDATE `'.$tableName.'` SET '.$this->genUpdateValuesString($values).' WHERE '.$this->genWhereClauseString($conditions).$optionsString;
-//        echo $sql;
         $stmt = $this->executeSql($sql, false);
         if(!$stmt) return $stmt;
         $affected_rows = $stmt->affected_rows;

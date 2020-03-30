@@ -94,18 +94,29 @@ class DBObject extends AObject{
      * @param array $conds
      * @param $order
      * @param null $limit
+     * @param null $offset
      * @return static[]
      */
-    static function getList(array $conds, $order = null, $limit = null){
-        $accounts = [];
+    static function getList(array $conds, $order = null, $limit = null, $offset = null){
+        $objects = [];
         $opts = [];
         if($order) $opts[DB::OPTION_ORDER_BY] = $order;
         if($limit) $opts[DB::OPTION_LIMIT] = $limit;
+        if($offset) $opts[DB::OPTION_OFFSET] = $offset;
         $rows = DB::get()->select(static::$TABLE, $conds, DB::SELECT_ARR, $opts);
         foreach($rows as $row){
-            $accounts[] = static::generate($row);
+            $objects[] = static::generate($row);
         }
-        return $accounts;
+        return $objects;
+    }
+
+    /**
+     * Get count of objects by conditions
+     * @param array $conds
+     * @return int
+     */
+    static function calcCount(array $conditions){
+        return DB::get()->select(static::$TABLE, $conditions, DB::SELECT_COUNT);
     }
 
 

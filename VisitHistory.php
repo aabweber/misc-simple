@@ -13,7 +13,7 @@ class VisitHistory{
         self::register();
     }
     static function go($left, $fragment = ''){
-        header( 'Location: https://'.INFO['DOMAIN'].self::get($left).($fragment?'#'.$fragment:'') );
+        header( 'Location: '.INFO['BASE_URL'].ltrim(self::get($left),'/').($fragment?'#'.$fragment:'') );
         exit;
     }
     private static function register(){

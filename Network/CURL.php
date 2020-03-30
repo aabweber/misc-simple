@@ -2,7 +2,7 @@
 namespace misc\Network;
 
 
-use core\Log;
+use core\ProxyLog;
 use misc\Utils;
 
 class CURL{
@@ -143,6 +143,7 @@ class CURL{
     }
 
     function run($verbose = false, $depth=0){
+//        $verbose = true;
         if($depth>10) return null;
 //        echo Utils::SHcolor($this->url, 82)."\n";
         $curl = curl_init($this->url);
@@ -176,10 +177,13 @@ class CURL{
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_MAXREDIRS, 1);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         if($this->proxy){
-            curl_setopt($curl, CURLOPT_PROXY, $this->proxy['addr'].':'.$this->proxy['port']);
+            $pStr = $this->proxy['addr'] . ':' . $this->proxy['port'];
+//            $pStr = 'socks5://' . $this->proxy['addr'] . ':' . $this->proxy['port'];
+//            echo $pStr."\n";
+            curl_setopt($curl, CURLOPT_PROXY, $pStr);
         }
 
         $c = '';

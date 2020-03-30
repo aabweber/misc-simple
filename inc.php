@@ -11,6 +11,7 @@ use misc\ReturnData;
 
 include BASE_DIR.'/misc/ReturnData.php';
 include BASE_DIR.'/misc/Utils.php';
+set_include_path(get_include_path() . PATH_SEPARATOR . '/usr/local/share/pear@7.2');
 include 'Mail.php';
 
 define('SESS_LIFETIME', 30*24*3600);

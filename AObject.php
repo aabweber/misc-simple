@@ -8,7 +8,9 @@
  */
 namespace misc;
 
-class AObject implements \JsonSerializable{
+use ArrayAccess;
+
+class AObject implements \JsonSerializable, ArrayAccess{
     use EventTrait;
 
     const AE_GEN        = 'ae_gen';
@@ -58,6 +60,34 @@ class AObject implements \JsonSerializable{
      */
     public function getAdata(): array{
         return $this->adata;
+    }
+
+    /**
+     * Array Access implementation
+     */
+
+
+//    public function __construct() {
+//    }
+
+    public function offsetSet($offset, $value) {
+        if (is_null($offset)) {
+            $this->adata[] = $value;
+        } else {
+            $this->adata[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset) {
+        return isset($this->adata[$offset]);
+    }
+
+    public function offsetUnset($offset) {
+        unset($this->adata[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return isset($this->adata[$offset]) ? $this->adata[$offset] : null;
     }
 
 }

@@ -25,6 +25,7 @@ abstract class Framework extends AObject{
     private $hTitle         = '';
     private $hKeywords      = '';
     private $hDescription   = '';
+    protected $registerView   = true;
 
     /** @var bool */
     private $is404  = false;
@@ -39,6 +40,7 @@ abstract class Framework extends AObject{
         $this->hDescription = INFO['DEFAULT_DESCRIPTION'];
         $this->returnFormat = INFO['FORMAT'];
         $this->args = $_REQUEST;//INFO['ARGS'];
+        $this->registerView &= $this->returnFormat==ReturnData::RETURN_FORMAT_TEMPLATE;
         foreach(static::$URL_RULES as $rule => $info){
 //            echo INFO['PAGE']." - ".$rule."<br>";
             if(preg_match('#^'.rtrim($rule, '/').'$#si', rtrim(INFO['PAGE'], '/'), $ms)){
@@ -54,7 +56,7 @@ abstract class Framework extends AObject{
                 $this->ruleInfo = $info;
                 $this->emitEvent(self::EVT_RULE_FOUND, $info);
 //                var_dump($this->returnFormat);exit;
-                if($this->returnFormat==ReturnData::RETURN_FORMAT_TEMPLATE) {
+                if($this->registerView) {
                     VisitHistory::init();
                 }
                 return true;
@@ -80,7 +82,6 @@ abstract class Framework extends AObject{
             }
             return null;
         }
-
         $this->result = $res = call_user_func_array([$this, $this->ruleInfo['dispatcher']], $this->ruleInfo['params']);
         return $res;
     }

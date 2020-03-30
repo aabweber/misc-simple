@@ -32,9 +32,9 @@ namespace misc {
         }
 
         /**
-         * @return array
+         * @return array|object
          */
-        public function getInfo(): array
+        public function getInfo()
         {
             return $this->info;
         }

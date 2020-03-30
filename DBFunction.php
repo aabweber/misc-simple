@@ -19,7 +19,7 @@ class DBFunction {
 	}
 
 	function __toString() {
-		return $this->sql;
+		return strval($this->sql);
 	}
 
 

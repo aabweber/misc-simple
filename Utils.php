@@ -76,19 +76,36 @@ class Utils {
      * @param int $length
      * @param bool $case
      * @param bool $onlyNumbers
+     * @param bool $includeSpec
      * @return string
      */
-	static function genRandomString($length = 10, $case = true, $onlyNumbers = false) {
+	static function genRandomString($length = 10, $case = true, $onlyNumbers = false, $includeSpec = false) {
 	    $symbols = range(0, 9);
 	    if(!$onlyNumbers){
 	        $symbols = array_merge($symbols, range('a', 'z'));
 	        if($case) $symbols = array_merge($symbols, range('A', 'Z'));
+        }
+        $ss = '!@#$%^&*()_+-=,.<>';
+        if($includeSpec){
+            $symbols = array_merge($symbols, preg_split('//', $ss, -1, PREG_SPLIT_NO_EMPTY));
         }
 	    $symbols = implode('', $symbols);
         $symbolsCount = strlen($symbols);
         $randString = '';
         for($i=0; $i<$length; $i++){
             $randString .= $symbols[rand(0, $symbolsCount -1)];
+        }
+        if($includeSpec){
+            $has = false;
+            for($i=0, $l=strlen($ss); $i<$l; $i++){
+                if(strpos($randString, $ss[$i])!==false){
+                    $has = true;
+                    break;
+                }
+            }
+            if(!$has){
+                $randString[rand(0, $length-1)] = $ss[rand(0, strlen($ss)-1)];
+            }
         }
         return $randString;
 	}
@@ -219,8 +236,12 @@ class Utils {
         return $upper ? strtoupper($hex) : $hex;
     }
 
-    static function transliterate($string){
-        return transliterator_transliterate('Any-Latin; Latin-ASCII;', $string);
+    static function transliterate($string, $strong = true){
+        $t = transliterator_transliterate('Any-Latin; Latin-ASCII;', $string);
+        if($string){
+            $t = preg_replace('#[^\w\d.-]+#si', '', $t);
+        }
+        return $t;
     }
 
     static function mb_count_chars($string){
@@ -287,6 +308,9 @@ class Utils {
         closedir($dh);
     }
 
+    static function leadZero($n, $d){
+        return $n<pow(10, $d)?'0'.$n:$n;
+    }
     static function exec($cmd, $outputfile, $pidfile){
         exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
     }
